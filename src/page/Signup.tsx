@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { authInstance } from '../api/api';
+import { getCookie } from '../api/cookie';
 
 interface SignupData {
   email: string;
@@ -25,6 +26,15 @@ function Signup() {
     msg: '',
   });
 
+  const navigate = useNavigate();
+  useEffect(() => {
+    const token = getCookie('token');
+    if (token) {
+      alert('이미 로그인 되어 있습니다');
+      navigate('/');
+    }
+  }, []);
+
   /**회원가입 정보 서버에 전송후 로그인*/
   const handleSubmit = async (event: React.SyntheticEvent) => {
     event.preventDefault();
@@ -32,9 +42,13 @@ function Signup() {
       setValidate({ ...validation, msg: '이메일 패스워드를 확인하세요' });
       return;
     }
-    console.log(signupData);
     const response = await authInstance.post('/users/signup', signupData);
-    console.log(response.data);
+    if (response.data.ok == true) {
+      alert('가입완료');
+      navigate('/login');
+    } else {
+      setValidate({ ...validation, msg: '이미 가입된 이메일 입니다.' });
+    }
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -43,6 +57,7 @@ function Signup() {
     /**이메일 유효성 검사 */
     if (name == 'email') {
       const isValidEmail = value.includes('@') && value.includes('.');
+
       /**유효성 상태 저장 */
       setValidate({ ...validation, email: isValidEmail });
     }
@@ -59,7 +74,6 @@ function Signup() {
     /**패스워드 재확인 체크 */
     if (name == 'passwordConfirm') {
       const isValidConfirm = value == signupData.password;
-      console.log(isValidConfirm);
       /**유효성 상태 저장 */
       setValidate({ ...validation, passwordConfirm: isValidConfirm });
     }
@@ -68,12 +82,8 @@ function Signup() {
     setSignupData({ ...signupData, [name]: value });
   };
 
-  const navigate = useNavigate();
-
   /**회원가입 화면 이동 */
-  const handleSignup = () => {
-    navigate('/signup');
-  };
+  const handleSignup = () => {};
 
   return (
     <LoginMain>
@@ -132,7 +142,7 @@ const LoginMain = styled.div`
 const Background = styled.div`
   width: 100%;
   height: 100vh;
-  background-color: rgba(255, 255, 255, 0.425);
+  background-color: rgba(255, 255, 255, 0.24);
 `;
 
 const LoginDiv = styled.div`
@@ -140,7 +150,7 @@ const LoginDiv = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  min-height: 60vh;
+  min-height: 70vh;
 `;
 const LoginForm = styled.form`
   display: flex;

@@ -39,6 +39,7 @@ orderInstance.interceptors.request.use(
 orderInstance.interceptors.response.use(
   (response) => {
     //응답에 대한 로직 작성
+
     console.log(response);
     return response;
   },
@@ -74,6 +75,14 @@ authInstance.interceptors.request.use(
 authInstance.interceptors.response.use(
   (response) => {
     //응답에 대한 로직 작성
+    if (response.data.accessToken) {
+      const now = new Date();
+      now.setHours(now.getHours() + 2);
+
+      setCookie('token', response.data.accessToken, {
+        expires: now,
+      });
+    }
     console.log(response);
     return response;
   },
@@ -82,11 +91,17 @@ authInstance.interceptors.response.use(
     //응답 에러가 발생했을 때 수행할 로직
     const { data } = error.response;
     if (
-      data.statusCode == 401 &&
-      data.message == '가입되지 않은 이메일 입니다.'
+      (data.statusCode == 401 &&
+        data.message == '가입되지 않은 이메일 입니다.') ||
+      data.message == '이미 가입된 이메일 입니다'
     ) {
       return { data: { statusCode: data.statusCode, message: data.message } };
     }
+
+    if (data.statusCode == 403 && data.message == '잘못된 비밀번호 입니다') {
+      alert('비밀번호가 틀렸습니다');
+    }
+    console.log(error);
     return Promise.reject(error);
   },
 );

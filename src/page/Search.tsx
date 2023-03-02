@@ -20,7 +20,6 @@ function Search() {
   const location = useLocation();
   const navigate = useNavigate();
   const locationSearch = location.state;
-  console.log(locationSearch);
   useEffect(() => {
     orderInstance
       .get(`search/${locationSearch}/1/0`)
@@ -70,7 +69,7 @@ const Main = styled.div`
   flex-direction: column;
   width: 100%;
   height: 100%;
-  background-color: beige;
+  background-color: #ffffff;
 `;
 
 const ProductContainer = styled.div`

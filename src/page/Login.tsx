@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { authInstance } from '../api/api';
+import { getCookie } from '../api/cookie';
 
 interface LoginData {
   email: string;
@@ -23,6 +24,13 @@ function Login() {
   });
 
   const navigate = useNavigate();
+  useEffect(() => {
+    const token = getCookie('token');
+    if (token) {
+      alert('이미 로그인 되어 있습니다');
+      navigate('/');
+    }
+  }, []);
 
   /**로그인 정보 서버에 전송후 토큰 세팅 */
   const handleSubmit = async (event: React.SyntheticEvent) => {
@@ -36,8 +44,9 @@ function Login() {
       setValidate({ ...validation, msg: '가입되지 않은 이메일 입니다.' });
       return;
     }
-    //쿠키 저장 로직
-    navigate('/');
+    /** 인터셉터에서 쿠키 저장 후 메인화면으로 이동*/
+    alert('로그인 되었습니다');
+    navigate('/', { state: { Login: true } });
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -113,7 +122,7 @@ const LoginMain = styled.div`
 const Background = styled.div`
   width: 100%;
   height: 100vh;
-  background-color: rgba(255, 255, 255, 0.425);
+  background-color: rgba(255, 255, 255, 0.24);
 `;
 
 const LoginDiv = styled.div`
@@ -122,7 +131,7 @@ const LoginDiv = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  min-height: 60vh;
+  min-height: 70vh;
 `;
 const LoginForm = styled.form`
   display: flex;
@@ -133,7 +142,6 @@ const LoginForm = styled.form`
   background-color: white;
   align-items: center;
   border: none;
-  border-radius: 15px;
   box-shadow: 3px 3px 10px rgba(0, 0, 0, 1);
   margin-bottom: 30px;
   padding: 30px 10px 50px 10px;

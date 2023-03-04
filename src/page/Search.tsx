@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { AxiosResponse } from 'axios';
 import styled from 'styled-components';
 import SearchIcon from '@mui/icons-material/Search';
@@ -6,6 +6,8 @@ import { orderInstance } from '../api/api';
 import ProductCard from '../components/ProductCard';
 import { useLocation, useNavigate } from 'react-router-dom';
 import MainHeader from '../components/Header';
+import useIntersect from '../custom/intersection-observer.custom';
+import { useFetchSearchProducts } from '../api/main-product-list';
 
 export interface Product {
   productId: number;
@@ -16,40 +18,54 @@ export interface Product {
 }
 
 function Search() {
-  const [products, setProduct] = useState<Product[]>([]);
   const [search, setSearch] = useState('');
+  const [sumbMit, setSubmit] = useState({ display: 0, search: '' });
   const location = useLocation();
   const navigate = useNavigate();
   const locationSearch = location.state;
-  useEffect(() => {
-    orderInstance
-      .get(`search/${locationSearch}/1/0`)
-      .then((response: AxiosResponse<Product[]>) => setProduct(response.data));
-  }, []);
+
+  // useEffect(() => {
+  //   setSubmit({ ...sumbMit, search: locationSearch });
+  //   console.log('useEffect');
+  //   console.log(sumbMit.search);
+  // }, []);
+
+  const { data, hasNextPage, isFetching, fetchNextPage } =
+    useFetchSearchProducts(locationSearch);
+  /**상품데이터 */
+  const products = useMemo(
+    () => (data ? data.pages.flatMap(({ data }) => data) : []),
+    [data],
+  );
+
+  const ref = useIntersect(
+    async (entry, observer) => {
+      observer.unobserve(entry.target);
+
+      if (hasNextPage && !isFetching) {
+        fetchNextPage();
+      }
+    },
+    { rootMargin: '0px 0px 500px 0px' },
+  );
 
   const handleChange = ({ target: { value } }: { target: { value: string } }) =>
     setSearch(value);
 
   const searchSubmit = async (event: any) => {
     event.preventDefault();
-    /**검색 데이터가 없을시 메인 데이터 출력 */
-    if (!search) {
-      const response = await orderInstance.get('main/1000/0');
-      setProduct(response.data);
-      return;
-    }
+    /**검색 데이터가 없을시 메인 화면 출력 */
+    if (!search) return window.location.replace('/');
+    /**데이터 로딩시 화면유무 */
+    setSubmit({ search: search, display: 1 });
 
-    /** search/:상품이름/:가격/:상품ID */
-    const response = await orderInstance.get(`search/${search}/1/0`);
-    console.log(response);
-    setProduct(response.data);
+    navigate('/search', { state: search });
+    window.location.reload();
   };
 
   const productMap = products?.map((country: Product) => {
     return <ProductCard key={country.productId} props={country} />;
   });
-  console.log(products);
-  console.log(productMap);
 
   return (
     <Main>
@@ -58,11 +74,25 @@ function Search() {
         <SearchIcon color="disabled" />
         <SearchInput placeholder="상품을 검색하세요" onChange={handleChange} />
       </SearchBar>
-      <ProductContainer>{products && productMap}</ProductContainer>
+      <ProductContainer>
+        {products.length || sumbMit.display ? (
+          productMap
+        ) : (
+          <NoData>{locationSearch}에 대한 검색결과가 없습니다</NoData>
+        )}
+        <Target ref={ref} />
+      </ProductContainer>
     </Main>
   );
 }
 export default Search;
+
+const NoData = styled.div`
+  position: fixed;
+  top: 40%;
+  font-size: 30px;
+  color: rgba(0, 0, 0, 0.4);
+`;
 
 const Main = styled.div`
   display: flex;
@@ -72,6 +102,10 @@ const Main = styled.div`
   width: 100%;
   height: 100%;
   background-color: #ffffff;
+`;
+
+const Target = styled.div`
+  height: 1px;
 `;
 
 const ProductContainer = styled.div`
@@ -96,9 +130,9 @@ const SearchBar = styled.form`
   &:hover {
     box-shadow: 1px 3px 8px rgb(0, 0, 0, 0.4);
   }
-  /* &:focus-within {
+  &:focus-within {
     box-shadow: 1px 3px 8px rgb(0, 0, 0, 0.4);
-  } */
+  }
 `;
 
 const SearchInput = styled.input`

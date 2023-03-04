@@ -56,14 +56,18 @@ function OrderModal(props: props) {
         <OrderDiv>
           <ProductName>{product.productName}</ProductName>
           <ProductPrice>₩{product.price.toLocaleString('ko-KR')}</ProductPrice>
-          <ProductStock>재고:{product.stock}</ProductStock>
-          <OrderQuantity
-            onChange={quantityHandle}
-            type="number"
-            min="1"
-            max="1000"
-            value={quantity}
-          ></OrderQuantity>
+          <ProductStock>재고: {product.stock}</ProductStock>
+          <QuantityDiv>
+            주문수량:
+            <OrderQuantity
+              onChange={quantityHandle}
+              type="number"
+              min="1"
+              max="1000"
+              value={quantity}
+            ></OrderQuantity>
+          </QuantityDiv>
+
           <OrderButton onClick={orderSubmit}>주문하기</OrderButton>
         </OrderDiv>
       </Modaldiv>
@@ -88,27 +92,43 @@ const Modaldiv = styled.div`
 
 const OrderDiv = styled.div`
   display: flex;
+  justify-content: center;
+  /* align-items: */
   flex-direction: column;
 `;
 
 const ProductName = styled.span`
-  padding-bottom: 100px;
+  padding-bottom: 70px;
 `;
 const ProductPrice = styled.span`
   font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 20px;
 `;
 const ProductStock = styled.span`
   font-size: 15px;
 `;
+
+const QuantityDiv = styled.span`
+  font-size: 15px;
+`;
 const OrderQuantity = styled.input`
   width: 40px;
+  margin-left: 10px;
   &:focus-within {
     border: none;
   }
 `;
 const OrderButton = styled.button`
+  background-color: #272727;
+  color: white;
   width: 100px;
   height: 30px;
+  margin-top: 10px;
+  &:hover {
+    cursor: pointer;
+    box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.8);
+  }
 `;
 
 const Background = styled.div`

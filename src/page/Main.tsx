@@ -21,25 +21,17 @@ export interface Product {
 }
 
 function MainPage() {
-  // const [products, setProduct] = useState<Product[]>([]);
   const [search, setSearch] = useState('');
-  const [lastId, setLastId] = useState(0);
 
   const { data, hasNextPage, isFetching, fetchNextPage } = useFetchProducts();
+  /**상품데이터 */
   const products = useMemo(
     () => (data ? data.pages.flatMap(({ data }) => data) : []),
     [data],
   );
 
-  console.log(products);
-
   const ref = useIntersect(
     async (entry, observer) => {
-      console.log('entry');
-      console.log(entry);
-      console.log('observer');
-      console.log(observer);
-      console.log();
       observer.unobserve(entry.target);
 
       if (hasNextPage && !isFetching) {
@@ -49,26 +41,19 @@ function MainPage() {
     { rootMargin: '0px 0px 500px 0px' },
   );
 
-  // const navigate = useNavigate();
-  // useEffect(() => {
-  //   orderInstance
-  //     .get(`main/1000/${lastId}`)
-  //     .then((response: AxiosResponse<Product[]>) => setProduct(response.data));
-  // }, []);
+  const navigate = useNavigate();
 
   const handleChange = ({ target: { value } }: { target: { value: string } }) =>
     setSearch(value);
 
-  // const searchSubmit = async (event: React.SyntheticEvent) => {
-  //   event.preventDefault();
-  //   /**검색 데이터가 없을시 메인 데이터 출력 */
-  //   if (!search) {
-  //     const response = await orderInstance.get('main/1000/0');
-  //     setProduct(response.data);
-  //     return;
-  //   }
-  //   navigate(`/search`, { state: search });
-  // };
+  const searchSubmit = async (event: React.SyntheticEvent) => {
+    event.preventDefault();
+    /**검색 데이터가 없을시 메인 페이지 reload*/
+    if (!search) {
+      return window.location.replace('/');
+    }
+    navigate(`/search`, { state: search });
+  };
 
   const productMap = products?.map((country: Product) => {
     return <ProductCard key={country.productId} props={country} />;
@@ -77,9 +62,7 @@ function MainPage() {
   return (
     <Main>
       <MainHeader />
-      <SearchBar
-      // onSubmit={searchSubmit}
-      >
+      <SearchBar onSubmit={searchSubmit}>
         <SearchIcon color="disabled" />
         <SearchInput placeholder="상품을 검색하세요" onChange={handleChange} />
       </SearchBar>
@@ -114,8 +97,6 @@ const ProductContainer = styled.div`
   grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
 `;
 
-const ProductDiv = styled.div``;
-
 const SearchBar = styled.form`
   width: 350px;
   height: 40px;
@@ -127,6 +108,9 @@ const SearchBar = styled.form`
   justify-content: center;
   align-items: center;
   box-shadow: 1px 3px 5px rgb(0, 0, 0, 0.2);
+  &:hover {
+    box-shadow: 1px 3px 8px rgb(0, 0, 0, 0.4);
+  }
   &:focus-within {
     box-shadow: 1px 3px 8px rgb(0, 0, 0, 0.4);
   }

@@ -29,3 +29,23 @@ export const useFetchProducts = () =>
       },
     },
   );
+
+export const useFetchSearchProducts = (locationSearch: string) =>
+  /** 키,비동기 호출,*/
+  useInfiniteQuery(
+    productKeys.lists(),
+    ({ pageParam = { lastPrice: 1, lastId: 0 } }: QueryFunctionContext) => {
+      return orderInstance.get<Product[]>(
+        `/search/${locationSearch}/${pageParam.lastPrice}/${pageParam.lastId}`,
+      );
+    },
+    {
+      getNextPageParam: ({ data }) => {
+        if (!data.length) return;
+        const { productId: lastId, price: lastPrice } = data[data.length - 1];
+        return data.length < 20
+          ? undefined
+          : { lastId: lastId, lastPrice: lastPrice };
+      },
+    },
+  );

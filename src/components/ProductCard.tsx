@@ -2,19 +2,32 @@ import { useRef, useState } from 'react';
 import { redirect, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { Product } from '../page/Main';
+import OrderModal from './OrderModal';
 
 function ProductCard({ props }: { props: Product }) {
+  const [modalOn, setModal] = useState(false);
+  const clickHandle = () => {
+    console.log('상품이 클릭되었습니다');
+    setModal(true);
+  };
+
   return (
-    <ProductDiv>
-      <ProductImage src={props.image} />
-      <ProductName>{props.productName}</ProductName>
-      <ProductPrice>₩{props.price.toLocaleString('ko-KR')}</ProductPrice>
-      <ProductStock>남은수량:{props.stock}</ProductStock>
-    </ProductDiv>
+    <ProductContainer>
+      <ProductDiv onClick={clickHandle}>
+        <ProductImage src={props.image} />
+        <ProductName>{props.productName}</ProductName>
+        <ProductPrice>₩{props.price.toLocaleString('ko-KR')}</ProductPrice>
+      </ProductDiv>
+      {modalOn && (
+        <OrderModal product={props} closeModal={() => setModal(!modalOn)} />
+      )}
+    </ProductContainer>
   );
 }
 
 export default ProductCard;
+
+const ProductContainer = styled.div``;
 
 const ProductDiv = styled.div`
   display: flex;
@@ -37,9 +50,4 @@ const ProductImage = styled.img`
 const ProductName = styled.span``;
 const ProductPrice = styled.span`
   font-size: 15px;
-`;
-
-const ProductStock = styled.span`
-  font-size: 13px;
-  padding-left: 110px;
 `;

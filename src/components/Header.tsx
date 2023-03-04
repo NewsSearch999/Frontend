@@ -26,6 +26,7 @@ function MainHeader() {
   const logout = () => {
     removeCookie('token');
     setLogin(false);
+    navigate('/');
     alert('로그아웃 되었습니다');
   };
 
@@ -35,7 +36,7 @@ function MainHeader() {
   };
 
   const myOrders = () => {
-    console.log('마이페이지');
+    navigate('/myorders');
   };
   return (
     <Header>

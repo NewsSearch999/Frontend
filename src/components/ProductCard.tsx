@@ -17,7 +17,6 @@ function ProductCard({ props }: { props: Product }) {
         <ProductImage src={props.image} />
         <ProductName>{props.productName}</ProductName>
         <ProductPrice>₩{props.price.toLocaleString('ko-KR')}</ProductPrice>
-        <ProductStock>남은수량:{props.stock}</ProductStock>
       </ProductDiv>
       {modalOn && (
         <OrderModal product={props} closeModal={() => setModal(!modalOn)} />
@@ -51,9 +50,4 @@ const ProductImage = styled.img`
 const ProductName = styled.span``;
 const ProductPrice = styled.span`
   font-size: 15px;
-`;
-
-const ProductStock = styled.span`
-  font-size: 13px;
-  padding-left: 110px;
 `;

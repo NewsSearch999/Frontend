@@ -1,10 +1,16 @@
 import { useCallback, useEffect, useMemo, useRef } from 'react';
 
-type IntersectHandler = (
+export type IntersectHandler = (
   entry: IntersectionObserverEntry,
   observer: IntersectionObserver,
 ) => void;
 
+export interface IntersectionObserverInit {
+  root?: Element | Document | null;
+  rootMargin?: string;
+  threshold?: number | number[];
+}
+/**무한스크롤 observer */
 const useIntersect = (
   onIntersect: IntersectHandler,
   options?: IntersectionObserverInit,
@@ -27,3 +33,5 @@ const useIntersect = (
 
   return ref;
 };
+
+export default useIntersect;

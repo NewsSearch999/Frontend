@@ -1,12 +1,9 @@
-import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 import { Routes, Route } from 'react-router-dom';
 import Login from './page/Login';
 import Signup from './page/Signup';
 import Search from './page/Search';
 import MainPage from './page/Main';
-import MainHeader from './components/Header';
 import { Myorder } from './page/Myorder';
 
 function App() {

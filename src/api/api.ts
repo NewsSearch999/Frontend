@@ -8,7 +8,7 @@ import { getCookie, removeCookie, setCookie } from './cookie';
 
 /**주문서버 인스턴스 */
 const orderInstance = axios.create({
-  baseURL: 'http://charm10jo-goten.shop',
+  baseURL: 'http://localhost:3000',
   timeout: 3000,
 });
 

@@ -1,5 +1,6 @@
 import { ErrorResponse } from '@remix-run/router';
 import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 import { getCookie, removeCookie, setCookie } from './cookie';
 
@@ -7,7 +8,7 @@ import { getCookie, removeCookie, setCookie } from './cookie';
 
 /**주문서버 인스턴스 */
 const orderInstance = axios.create({
-  baseURL: 'http://localhost:3000',
+  baseURL: 'http://charm10jo-goten.shop',
   timeout: 3000,
 });
 
@@ -22,7 +23,7 @@ const authInstance = axios.create({
 orderInstance.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
     //요청을 보내기 전에 수행할 로직
-    const Token = getCookie('accessToken');
+    const Token = getCookie('token');
 
     config.headers.set('authorization', `Bearer ${Token}`);
     config.headers.set('Content-Type', 'application/json; charset=utf-8');
@@ -46,7 +47,20 @@ orderInstance.interceptors.response.use(
 
   (error) => {
     //응답 에러가 발생했을 때 수행할 로직
-    console.log(error); //디버깅
+    const { data } = error.response;
+    /**토큰 만료시 */
+    if (data.statusCode == 401 && data.message == 'Unauthorized') {
+      alert('로그인 만료');
+      removeCookie('token');
+      return window.location.replace('/login');
+    }
+
+    /**주문 재고 부족 */
+    if (data.statusCode == 403 && data.message == '재고가 부족합니다') {
+      /**OrderCard에서 예외처리 */
+      return error.response;
+    }
+
     return Promise.reject(error);
   },
 );

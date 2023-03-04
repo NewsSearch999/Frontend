@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { authInstance } from '../api/api';
 import { getCookie } from '../api/cookie';
+import MainHeader from '../components/Header';
 
 interface SignupData {
   email: string;
@@ -88,6 +89,7 @@ function Signup() {
   return (
     <LoginMain>
       <Background>
+        <MainHeader />
         <LoginDiv>
           <LoginForm onSubmit={handleSubmit}>
             <InputDiv>

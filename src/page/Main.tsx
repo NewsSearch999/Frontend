@@ -5,6 +5,8 @@ import SearchIcon from '@mui/icons-material/Search';
 import { orderInstance } from '../api/api';
 import ProductCard from '../components/ProductCard';
 import { useNavigate } from 'react-router-dom';
+import OrderModal from '../components/OrderModal';
+import MainHeader from '../components/Header';
 
 export interface Product {
   productId: number;
@@ -17,11 +19,12 @@ export interface Product {
 function MainPage() {
   const [products, setProduct] = useState<Product[]>([]);
   const [search, setSearch] = useState('');
+  const [lastId, setLastId] = useState(0);
 
   const navigate = useNavigate();
   useEffect(() => {
     orderInstance
-      .get('main/1000/0')
+      .get(`main/1000/${lastId}`)
       .then((response: AxiosResponse<Product[]>) => setProduct(response.data));
   }, []);
 
@@ -42,11 +45,10 @@ function MainPage() {
   const productMap = products?.map((country: Product) => {
     return <ProductCard key={country.productId} props={country} />;
   });
-  console.log(products);
-  console.log(productMap);
 
   return (
     <Main>
+      <MainHeader />
       <SearchBar onSubmit={searchSubmit}>
         <SearchIcon color="disabled" />
         <SearchInput placeholder="상품을 검색하세요" onChange={handleChange} />
@@ -74,6 +76,8 @@ const ProductContainer = styled.div`
   gap: 1rem 4rem;
   grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
 `;
+
+const ProductDiv = styled.div``;
 
 const SearchBar = styled.form`
   width: 350px;

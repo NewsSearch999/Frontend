@@ -5,6 +5,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import { orderInstance } from '../api/api';
 import ProductCard from '../components/ProductCard';
 import { useLocation, useNavigate } from 'react-router-dom';
+import MainHeader from '../components/Header';
 
 export interface Product {
   productId: number;
@@ -52,6 +53,7 @@ function Search() {
 
   return (
     <Main>
+      <MainHeader />
       <SearchBar onSubmit={searchSubmit}>
         <SearchIcon color="disabled" />
         <SearchInput placeholder="상품을 검색하세요" onChange={handleChange} />
@@ -91,9 +93,12 @@ const SearchBar = styled.form`
   justify-content: center;
   align-items: center;
   box-shadow: 1px 3px 5px rgb(0, 0, 0, 0.2);
-  &:focus-within {
+  &:hover {
     box-shadow: 1px 3px 8px rgb(0, 0, 0, 0.4);
   }
+  /* &:focus-within {
+    box-shadow: 1px 3px 8px rgb(0, 0, 0, 0.4);
+  } */
 `;
 
 const SearchInput = styled.input`

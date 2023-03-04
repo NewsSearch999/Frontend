@@ -1,3 +1,14 @@
 .App {
   height: 100%;
 }
+
+/* 닫기 버튼 */
+#close-button:hover {
+  cursor: pointer;
+}
+
+#close-button {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+}

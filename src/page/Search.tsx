@@ -18,21 +18,21 @@ export interface Product {
 }
 
 function Search() {
-  const [sumbMit, setSubmit] = useState({ display: 0 });
+  const [sumbMit, setSubmit] = useState(false);
   const navigate = useNavigate();
   const [searchParams, setSerchParams] = useSearchParams();
   const search = searchParams.get('search');
   const price = searchParams.get('price');
 
-  const { data, hasNextPage, isFetching, fetchNextPage, remove, refetch } =
+  const { data, hasNextPage, isFetching, fetchNextPage, remove } =
     useFetchSearchProducts(search!, price || '0');
 
+  /**상품데이터 */
   const products = useMemo(
     () => (data ? data.pages.flatMap(({ data }) => data) : []),
     [data],
   );
 
-  /**상품데이터 */
   const ref = useIntersect(
     async (entry, observer) => {
       observer.unobserve(entry.target);
@@ -48,6 +48,7 @@ function Search() {
   const priceInputRef = useRef<HTMLInputElement>(null);
 
   const searchSubmit = async (event: any) => {
+    setSubmit(true);
     event.preventDefault();
     const searchValue = searchInputRef.current!.value;
     const priceValue = priceInputRef.current!.value;
@@ -58,6 +59,7 @@ function Search() {
   };
 
   const priceSubmit = async (event: React.SyntheticEvent) => {
+    setSubmit(true);
     event.preventDefault();
     const priceValue = priceInputRef.current!.value;
     const searchValue = searchInputRef.current!.value;
@@ -94,7 +96,7 @@ function Search() {
         </PriceForm>
       </SearchDiv>
       <ProductContainer>
-        {products.length || sumbMit.display ? (
+        {products.length || sumbMit ? (
           productMap
         ) : (
           <NoData>{search}에 대한 검색결과가 없습니다</NoData>

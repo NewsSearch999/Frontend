@@ -28,7 +28,7 @@ export interface Product {
 function MainPage() {
   const [searchParams, setSerchParams] = useSearchParams();
   const price = searchParams.get('price');
-  const { data, hasNextPage, isFetching, fetchNextPage, remove, refetch } =
+  const { data, hasNextPage, isFetching, fetchNextPage, remove } =
     useFetchProducts(price || '0');
 
   /**상품데이터 */
@@ -60,8 +60,7 @@ function MainPage() {
     const priceValue = priceInputRef.current!.value;
     const params = { search: searchValue, price: priceValue };
     if (!searchValue && priceValue == '0') {
-      remove();
-      return refetch();
+      return remove();
     } else if (!searchValue && priceValue !== '0') {
       setSerchParams({ price: priceValue });
       remove();

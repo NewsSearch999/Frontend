@@ -8,6 +8,7 @@ import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import MainHeader from '../components/Header';
 import useIntersect from '../custom/intersection-observer.custom';
 import { useFetchSearchProducts } from '../api/main-product-list';
+import TopButton from '../components/TopButton';
 
 export interface Product {
   productId: number;
@@ -103,6 +104,7 @@ function Search() {
         )}
         <Target ref={ref} />
       </ProductContainer>
+      <TopButton />
     </Main>
   );
 }
@@ -145,6 +147,7 @@ const Main = styled.div`
   background-color: #ffffff;
 `;
 
+/**무한 스크롤 타겟  */
 const Target = styled.div`
   height: 1px;
 `;

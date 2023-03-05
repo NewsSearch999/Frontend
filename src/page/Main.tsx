@@ -16,6 +16,7 @@ import { useFetchProducts } from '../api/main-product-list';
 import useIntersect, {
   IntersectHandler,
 } from '../custom/intersection-observer.custom';
+import TopButton from '../components/TopButton';
 
 export interface Product {
   productId: number;
@@ -99,7 +100,6 @@ function MainPage() {
           <SearchInput placeholder="상품을 검색하세요" ref={searchInputRef} />
         </SearchBar>
         <PriceInputSpan>가격: </PriceInputSpan>
-
         <PriceForm onSubmit={priceSubmit}>
           <PriceInput ref={priceInputRef} defaultValue="0" type="number" />
         </PriceForm>
@@ -108,11 +108,13 @@ function MainPage() {
         {products && productMap}
         <Target ref={ref} />
       </ProductContainer>
+      <TopButton />
     </Main>
   );
 }
 export default MainPage;
 
+/**무한 스크롤 타겟  */
 const Target = styled.div`
   height: 1px;
 `;

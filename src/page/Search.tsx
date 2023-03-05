@@ -1,10 +1,10 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { AxiosResponse } from 'axios';
 import styled from 'styled-components';
 import SearchIcon from '@mui/icons-material/Search';
 import { orderInstance } from '../api/api';
 import ProductCard from '../components/ProductCard';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import MainHeader from '../components/Header';
 import useIntersect from '../custom/intersection-observer.custom';
 import { useFetchSearchProducts } from '../api/main-product-list';
@@ -18,38 +18,24 @@ export interface Product {
 }
 
 function Search() {
-  const [search, setSearch] = useState('');
-  const [sumbMit, setSubmit] = useState({ display: 0, search: '' });
-  const [products, setProduct] = useState<Product[]>([]);
-  const location = useLocation();
+  const [sumbMit, setSubmit] = useState({ display: 0 });
   const navigate = useNavigate();
-  const locationSearch = location.state;
+  const [searchParams, setSerchParams] = useSearchParams();
+  const search = searchParams.get('search');
+  const price = searchParams.get('price');
 
-  const { data, hasNextPage, isFetching, fetchNextPage } =
-    useFetchSearchProducts(sumbMit.search ? sumbMit.search : locationSearch);
+  const { data, hasNextPage, isFetching, fetchNextPage, remove, refetch } =
+    useFetchSearchProducts(search!, price || '0');
 
-  useEffect(() => {
-    console.log('useEffect');
+  const products = useMemo(
+    () => (data ? data.pages.flatMap(({ data }) => data) : []),
+    [data],
+  );
 
-    setProduct(
-      useMemo(
-        () => (data ? data.pages.flatMap(({ data }) => data) : []),
-        [data],
-      ),
-    );
-  }, [data]);
   /**상품데이터 */
-
   const ref = useIntersect(
     async (entry, observer) => {
       observer.unobserve(entry.target);
-      console.log(data);
-      console.log('hasNextPage');
-      console.log(hasNextPage);
-      console.log('isFetching');
-      console.log(isFetching);
-      console.log('fetchNextPage');
-      console.log(fetchNextPage);
       if (hasNextPage && !isFetching) {
         fetchNextPage();
       }
@@ -57,19 +43,28 @@ function Search() {
     { rootMargin: '0px 0px 500px 0px' },
   );
 
-  const handleChange = ({ target: { value } }: { target: { value: string } }) =>
-    setSearch(value);
+  const searchInputRef = useRef<HTMLInputElement>(null);
+
+  const priceInputRef = useRef<HTMLInputElement>(null);
 
   const searchSubmit = async (event: any) => {
     event.preventDefault();
+    const searchValue = searchInputRef.current!.value;
+    const priceValue = priceInputRef.current!.value;
     /**검색 데이터가 없을시 메인 화면 출력 */
-    console.log('제출됨');
-    if (!search) return navigate('/');
-    /**데이터 로딩시 화면유무 */
-    setSubmit({ search: search, display: 1 });
-    // const options = { cancelRefetch: true, pageParam: {} };
-    // fetchNextPage(options);
-    // navigate('/search', { state: search });
+    if (!searchValue) return navigate(`/?price${priceValue || 0}`);
+    remove();
+    return navigate(`/search?search=${searchValue}&price=${priceValue || 0}`);
+  };
+
+  const priceSubmit = async (event: React.SyntheticEvent) => {
+    event.preventDefault();
+    const priceValue = priceInputRef.current!.value;
+    const searchValue = searchInputRef.current!.value;
+    /**검색 데이터가 없을시 메인 화면 출력 */
+    if (!searchValue) return navigate(`/?price${priceValue || 0}`);
+    remove();
+    return navigate(`/search?search=${searchValue}&price=${priceValue || 0}`);
   };
 
   const productMap = products?.map((country: Product) => {
@@ -79,15 +74,30 @@ function Search() {
   return (
     <Main>
       <MainHeader />
-      <SearchBar onSubmit={searchSubmit}>
-        <SearchIcon color="disabled" />
-        <SearchInput placeholder="상품을 검색하세요" onChange={handleChange} />
-      </SearchBar>
+      <SearchDiv>
+        <SearchBar onSubmit={searchSubmit}>
+          <SearchIcon color="disabled" />
+          <SearchInput
+            defaultValue={search!}
+            ref={searchInputRef}
+            placeholder="상품을 검색하세요"
+          />
+        </SearchBar>
+        <PriceInputSpan>가격: </PriceInputSpan>
+
+        <PriceForm onSubmit={priceSubmit}>
+          <PriceInput
+            ref={priceInputRef}
+            defaultValue={price || '0'}
+            type="number"
+          />
+        </PriceForm>
+      </SearchDiv>
       <ProductContainer>
         {products.length || sumbMit.display ? (
           productMap
         ) : (
-          <NoData>{locationSearch}에 대한 검색결과가 없습니다</NoData>
+          <NoData>{search}에 대한 검색결과가 없습니다</NoData>
         )}
         <Target ref={ref} />
       </ProductContainer>
@@ -101,6 +111,26 @@ const NoData = styled.div`
   top: 40%;
   font-size: 30px;
   color: rgba(0, 0, 0, 0.4);
+`;
+
+const PriceForm = styled.form``;
+
+const SearchDiv = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const PriceInputSpan = styled.div`
+  font-size: 15px;
+  margin: 0px 10px 0px 10px;
+`;
+
+const PriceInput = styled.input`
+  width: 80px;
+  height: 18px;
+  &:focus-within {
+    outline: none;
+  }
 `;
 
 const Main = styled.div`

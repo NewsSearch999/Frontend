@@ -8,13 +8,13 @@ import { getCookie, removeCookie, setCookie } from './cookie';
 
 /**주문서버 인스턴스 */
 const orderInstance = axios.create({
-  baseURL: process.env.REACT_APP_API,
+  baseURL: 'http://localhost:3000',
   timeout: 3000,
 });
 
 /**인증서버 인스턴스 */
 const authInstance = axios.create({
-  baseURL: process.env.REACT_APP_API,
+  baseURL: 'http://localhost:3000',
   timeout: 3000,
 });
 
@@ -115,7 +115,6 @@ authInstance.interceptors.response.use(
     if (data.statusCode == 403 && data.message == '잘못된 비밀번호 입니다') {
       alert('비밀번호가 틀렸습니다');
     }
-    console.log(error);
     return Promise.reject(error);
   },
 );

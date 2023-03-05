@@ -1,10 +1,15 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { AxiosResponse } from 'axios';
 import styled from 'styled-components';
 import SearchIcon from '@mui/icons-material/Search';
 import { orderInstance } from '../api/api';
 import ProductCard from '../components/ProductCard';
-import { useNavigate } from 'react-router-dom';
+import {
+  createSearchParams,
+  useLocation,
+  useNavigate,
+  useSearchParams,
+} from 'react-router-dom';
 import OrderModal from '../components/OrderModal';
 import MainHeader from '../components/Header';
 import { useFetchProducts } from '../api/main-product-list';
@@ -21,15 +26,16 @@ export interface Product {
 }
 
 function MainPage() {
-  const [search, setSearch] = useState('');
+  const [searchParams, setSerchParams] = useSearchParams();
+  const price = searchParams.get('price');
+  const { data, hasNextPage, isFetching, fetchNextPage, remove, refetch } =
+    useFetchProducts(price || '0');
 
-  const { data, hasNextPage, isFetching, fetchNextPage } = useFetchProducts();
   /**상품데이터 */
   const products = useMemo(
     () => (data ? data.pages.flatMap(({ data }) => data) : []),
     [data],
   );
-
   const ref = useIntersect(
     async (entry, observer) => {
       observer.unobserve(entry.target);
@@ -43,16 +49,42 @@ function MainPage() {
 
   const navigate = useNavigate();
 
-  const handleChange = ({ target: { value } }: { target: { value: string } }) =>
-    setSearch(value);
+  const searchInputRef = useRef<HTMLInputElement>(null);
+
+  const priceInputRef = useRef<HTMLInputElement>(null);
 
   const searchSubmit = async (event: React.SyntheticEvent) => {
     event.preventDefault();
     /**검색 데이터가 없을시 메인 페이지 reload*/
-    if (!search) {
-      return window.location.replace('/');
+    const searchValue = searchInputRef.current!.value;
+    const priceValue = priceInputRef.current!.value;
+    const params = { search: searchValue, price: priceValue };
+    if (!searchValue && priceValue == '0') {
+      remove();
+      return refetch();
+    } else if (!searchValue && priceValue !== '0') {
+      setSerchParams({ price: priceValue });
+      remove();
+      return;
     }
-    navigate(`/search`, { state: search });
+    /**검색어가 있는 경우 검색 페이지 navigate  */
+    navigate({ pathname: '/search', search: `?${createSearchParams(params)}` });
+  };
+
+  const priceSubmit = async (event: React.SyntheticEvent) => {
+    event.preventDefault();
+    const priceValue = priceInputRef.current!.value;
+    const searchValue = searchInputRef.current!.value;
+    const params = { search: searchValue, price: priceValue };
+    if (searchValue) {
+      return navigate({
+        pathname: '/search',
+        search: `?${createSearchParams(params)}`,
+      });
+    }
+    setSerchParams({ price: priceValue });
+    remove();
+    return;
   };
 
   const productMap = products?.map((country: Product) => {
@@ -62,10 +94,17 @@ function MainPage() {
   return (
     <Main>
       <MainHeader />
-      <SearchBar onSubmit={searchSubmit}>
-        <SearchIcon color="disabled" />
-        <SearchInput placeholder="상품을 검색하세요" onChange={handleChange} />
-      </SearchBar>
+      <SearchDiv>
+        <SearchBar onSubmit={searchSubmit}>
+          <SearchIcon color="disabled" />
+          <SearchInput placeholder="상품을 검색하세요" ref={searchInputRef} />
+        </SearchBar>
+        <PriceInputSpan>가격: </PriceInputSpan>
+
+        <PriceForm onSubmit={priceSubmit}>
+          <PriceInput ref={priceInputRef} defaultValue="0" type="number" />
+        </PriceForm>
+      </SearchDiv>
       <ProductContainer>
         {products && productMap}
         <Target ref={ref} />
@@ -78,6 +117,8 @@ export default MainPage;
 const Target = styled.div`
   height: 1px;
 `;
+
+const PriceForm = styled.form``;
 
 const Main = styled.div`
   display: flex;
@@ -126,6 +167,24 @@ const SearchInput = styled.input`
     color: #adadad;
   }
   &:focus {
+    outline: none;
+  }
+`;
+
+const SearchDiv = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const PriceInputSpan = styled.div`
+  font-size: 15px;
+  margin: 0px 10px 0px 10px;
+`;
+
+const PriceInput = styled.input`
+  width: 80px;
+  height: 18px;
+  &:focus-within {
     outline: none;
   }
 `;

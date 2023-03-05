@@ -20,28 +20,36 @@ export interface Product {
 function Search() {
   const [search, setSearch] = useState('');
   const [sumbMit, setSubmit] = useState({ display: 0, search: '' });
+  const [products, setProduct] = useState<Product[]>([]);
   const location = useLocation();
   const navigate = useNavigate();
   const locationSearch = location.state;
 
-  // useEffect(() => {
-  //   setSubmit({ ...sumbMit, search: locationSearch });
-  //   console.log('useEffect');
-  //   console.log(sumbMit.search);
-  // }, []);
-
   const { data, hasNextPage, isFetching, fetchNextPage } =
-    useFetchSearchProducts(locationSearch);
+    useFetchSearchProducts(sumbMit.search ? sumbMit.search : locationSearch);
+
+  useEffect(() => {
+    console.log('useEffect');
+
+    setProduct(
+      useMemo(
+        () => (data ? data.pages.flatMap(({ data }) => data) : []),
+        [data],
+      ),
+    );
+  }, [data]);
   /**상품데이터 */
-  const products = useMemo(
-    () => (data ? data.pages.flatMap(({ data }) => data) : []),
-    [data],
-  );
 
   const ref = useIntersect(
     async (entry, observer) => {
       observer.unobserve(entry.target);
-
+      console.log(data);
+      console.log('hasNextPage');
+      console.log(hasNextPage);
+      console.log('isFetching');
+      console.log(isFetching);
+      console.log('fetchNextPage');
+      console.log(fetchNextPage);
       if (hasNextPage && !isFetching) {
         fetchNextPage();
       }
@@ -55,12 +63,13 @@ function Search() {
   const searchSubmit = async (event: any) => {
     event.preventDefault();
     /**검색 데이터가 없을시 메인 화면 출력 */
-    if (!search) return window.location.replace('/');
+    console.log('제출됨');
+    if (!search) return navigate('/');
     /**데이터 로딩시 화면유무 */
     setSubmit({ search: search, display: 1 });
-
-    navigate('/search', { state: search });
-    window.location.reload();
+    // const options = { cancelRefetch: true, pageParam: {} };
+    // fetchNextPage(options);
+    // navigate('/search', { state: search });
   };
 
   const productMap = products?.map((country: Product) => {

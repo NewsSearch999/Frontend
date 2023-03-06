@@ -46,7 +46,14 @@ function Login() {
       return;
     }
     /** 인터셉터에서 쿠키 저장 후 메인화면으로 이동*/
-    alert('로그인 되었습니다');
+
+    // Swal.fire({
+    //   position: 'center',
+    //   icon: 'success',
+    //   title: '로그인 되었습니다',
+    //   showConfirmButton: false,
+    //   timer: 1500,
+    // });
     navigate('/', { state: { Login: true } });
   };
 
@@ -129,7 +136,6 @@ const Background = styled.div`
 
 const LoginDiv = styled.div`
   display: flex;
-
   flex-direction: column;
   justify-content: center;
   align-items: center;

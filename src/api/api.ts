@@ -1,6 +1,4 @@
-import { ErrorResponse } from '@remix-run/router';
-import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
-import { useNavigate } from 'react-router-dom';
+import axios, { InternalAxiosRequestConfig } from 'axios';
 
 import { getCookie, removeCookie, setCookie } from './cookie';
 
@@ -115,7 +113,6 @@ authInstance.interceptors.response.use(
     if (data.statusCode == 403 && data.message == '잘못된 비밀번호 입니다') {
       alert('비밀번호가 틀렸습니다');
     }
-    console.log(error);
     return Promise.reject(error);
   },
 );

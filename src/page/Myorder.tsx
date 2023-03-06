@@ -6,6 +6,7 @@ import { orderInstance } from '../api/api';
 import { getCookie, removeCookie } from '../api/cookie';
 import MainHeader from '../components/Header';
 import OrderCard from '../components/OrderCard';
+import TopButton from '../components/TopButton';
 import { Product } from './Main';
 
 export interface Order {
@@ -59,6 +60,7 @@ export function Myorder() {
         </OrderHeader>
         {orders && ordersMap}
       </OrderContainer>
+      <TopButton />
     </MyorderDiv>
   );
 }

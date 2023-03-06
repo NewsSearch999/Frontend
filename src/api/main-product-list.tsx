@@ -12,11 +12,14 @@ const productKeys = {
 };
 
 /** 무한 스크롤 */
-export const useFetchProducts = () =>
+export const useFetchProducts = (price: string) => {
+  console.log('infinitySearch');
+  console.log(price);
+
   /** 키,비동기 호출,*/
-  useInfiniteQuery(
+  return useInfiniteQuery(
     productKeys.lists(),
-    ({ pageParam = { lastPrice: 1, lastId: 0 } }: QueryFunctionContext) => {
+    ({ pageParam = { lastPrice: price, lastId: 0 } }: QueryFunctionContext) => {
       return orderInstance.get<Product[]>(
         `/main/${pageParam.lastPrice}/${pageParam.lastId}`,
       );
@@ -30,14 +33,15 @@ export const useFetchProducts = () =>
       },
     },
   );
+};
 
-export const useFetchSearchProducts = (locationSearch: string) =>
+export const useFetchSearchProducts = (search: string, price: string) =>
   /** 키,비동기 호출,*/
   useInfiniteQuery(
     productKeys.lists(),
-    ({ pageParam = { lastPrice: 1, lastId: 0 } }: QueryFunctionContext) => {
+    ({ pageParam = { lastPrice: price, lastId: 0 } }: QueryFunctionContext) => {
       return orderInstance.get<Product[]>(
-        `/search/${locationSearch}/${pageParam.lastPrice}/${pageParam.lastId}`,
+        `/search/${search}/${pageParam.lastPrice}/${pageParam.lastId}`,
       );
     },
     {

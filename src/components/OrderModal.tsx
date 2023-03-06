@@ -1,10 +1,9 @@
-import { useEffect, useRef, useState } from 'react';
-import { Navigate, redirect, useLocation, useNavigate } from 'react-router-dom';
-import styled, { css } from 'styled-components';
-import { getCookie, removeCookie } from '../api/cookie';
-import CloseIcon from '@mui/icons-material/Close';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { orderInstance } from '../api/api';
 import { Product } from '../page/Main';
+import styled from 'styled-components';
+import CloseIcon from '@mui/icons-material/Close';
 
 interface props {
   closeModal: () => void;

@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import { QueryFunctionContext, useInfiniteQuery } from 'react-query';
 import { Product } from '../page/Main';
 import { orderInstance } from './api';
@@ -6,9 +5,6 @@ import { orderInstance } from './api';
 const productKeys = {
   all: ['products'] as const,
   lists: () => [...productKeys.all, 'list'] as const,
-  // list: (filters: string) => [...productKeys.lists(), { filters }] as const,
-  // details: () => [...productKeys.all, 'detail'] as const,
-  // detail: (id: number) => [...productKeys.details(), id] as const,
 };
 
 /** 무한 스크롤 */

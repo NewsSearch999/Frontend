@@ -1,14 +1,12 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
-import { AxiosResponse } from 'axios';
-import styled from 'styled-components';
+import { useMemo, useRef, useState } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useFetchSearchProducts } from '../api/main-product-list';
 import SearchIcon from '@mui/icons-material/Search';
-import { orderInstance } from '../api/api';
 import ProductCard from '../components/ProductCard';
-import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import MainHeader from '../components/Header';
 import useIntersect from '../custom/intersection-observer.custom';
-import { useFetchSearchProducts } from '../api/main-product-list';
 import TopButton from '../components/TopButton';
+import styled from 'styled-components';
 
 export interface Product {
   productId: number;

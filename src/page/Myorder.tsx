@@ -1,13 +1,12 @@
 import { AxiosResponse } from 'axios';
-import { useEffect, useRef, useState } from 'react';
-import { redirect, useLocation, useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import { orderInstance } from '../api/api';
-import { getCookie, removeCookie } from '../api/cookie';
+import { getCookie } from '../api/cookie';
 import MainHeader from '../components/Header';
 import OrderCard from '../components/OrderCard';
 import TopButton from '../components/TopButton';
-import { Product } from './Main';
 
 export interface Order {
   orderId: number;

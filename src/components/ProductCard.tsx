@@ -1,5 +1,4 @@
-import { useRef, useState } from 'react';
-import { redirect, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 import styled from 'styled-components';
 import { Product } from '../page/Main';
 import OrderModal from './OrderModal';

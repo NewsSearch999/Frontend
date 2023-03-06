@@ -1,21 +1,17 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { AxiosResponse } from 'axios';
+import React, { useMemo, useRef } from 'react';
+
 import styled from 'styled-components';
 import SearchIcon from '@mui/icons-material/Search';
-import { orderInstance } from '../api/api';
 import ProductCard from '../components/ProductCard';
 import {
   createSearchParams,
-  useLocation,
   useNavigate,
   useSearchParams,
 } from 'react-router-dom';
-import OrderModal from '../components/OrderModal';
+
 import MainHeader from '../components/Header';
 import { useFetchProducts } from '../api/main-product-list';
-import useIntersect, {
-  IntersectHandler,
-} from '../custom/intersection-observer.custom';
+import useIntersect from '../custom/intersection-observer.custom';
 import TopButton from '../components/TopButton';
 
 export interface Product {

@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
-import { redirect, useLocation, useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import { getCookie, removeCookie } from '../api/cookie';
 

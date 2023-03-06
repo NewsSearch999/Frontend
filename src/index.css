@@ -1,7 +1,5 @@
 body {
   margin: 0;
-  /* overflow-y: scroll; */
-  /* font-family: 'Roboto Mono', monospace; */
   font-family: 'Noto Sans KR', sans-serif;
 }
 
@@ -9,11 +7,3 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
-
-/* html,
-body,
-#root,
-.App {
-  height: 100%;
-  width: 100%;
-} */

@@ -1,6 +1,4 @@
-import { ErrorResponse } from '@remix-run/router';
-import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
-import { useNavigate } from 'react-router-dom';
+import axios, { InternalAxiosRequestConfig } from 'axios';
 
 import { getCookie, removeCookie, setCookie } from './cookie';
 
@@ -8,13 +6,13 @@ import { getCookie, removeCookie, setCookie } from './cookie';
 
 /**주문서버 인스턴스 */
 const orderInstance = axios.create({
-  baseURL: 'http://localhost:3000',
+  baseURL: process.env.REACT_APP_API,
   timeout: 3000,
 });
 
 /**인증서버 인스턴스 */
 const authInstance = axios.create({
-  baseURL: 'http://localhost:3000',
+  baseURL: process.env.REACT_APP_API,
   timeout: 3000,
 });
 

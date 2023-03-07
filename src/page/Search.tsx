@@ -17,15 +17,13 @@ export interface Product {
 }
 
 function Search() {
-  const [sumbMit, setSubmit] = useState(false);
   const navigate = useNavigate();
   const [searchParams, setSerchParams] = useSearchParams();
   const search = searchParams.get('search');
   const price = searchParams.get('price');
 
-  const { data, hasNextPage, isFetching, fetchNextPage, remove } =
+  const { data, hasNextPage, isFetching, fetchNextPage, remove, isLoading } =
     useFetchSearchProducts(search!, price || '0');
-
   /**상품데이터 */
   const products = useMemo(
     () => (data ? data.pages.flatMap(({ data }) => data) : []),
@@ -47,25 +45,23 @@ function Search() {
   const priceInputRef = useRef<HTMLInputElement>(null);
 
   const searchSubmit = async (event: any) => {
-    setSubmit(true);
     event.preventDefault();
     const searchValue = searchInputRef.current!.value;
     const priceValue = priceInputRef.current!.value;
     /**검색 데이터가 없을시 메인 화면 출력 */
     if (!searchValue) return navigate(`/?price${priceValue || 0}`);
     remove();
-    return navigate(`/search?search=${searchValue}&price=${priceValue || 0}`);
+    navigate(`/search?search=${searchValue}&price=${priceValue || 0}`);
   };
 
   const priceSubmit = async (event: React.SyntheticEvent) => {
-    setSubmit(true);
     event.preventDefault();
     const priceValue = priceInputRef.current!.value;
     const searchValue = searchInputRef.current!.value;
     /**검색 데이터가 없을시 메인 화면 출력 */
     if (!searchValue) return navigate(`/?price${priceValue || 0}`);
     remove();
-    return navigate(`/search?search=${searchValue}&price=${priceValue || 0}`);
+    navigate(`/search?search=${searchValue}&price=${priceValue || 0}`);
   };
 
   const productMap = products?.map((country: Product) => {
@@ -95,10 +91,10 @@ function Search() {
         </PriceForm>
       </SearchDiv>
       <ProductContainer>
-        {products.length || sumbMit ? (
+        {products.length || isLoading ? (
           productMap
         ) : (
-          <NoData>{search}에 대한 검색결과가 없습니다</NoData>
+          <NoData>{search}에 대한 가격 검색결과가 없습니다</NoData>
         )}
         <Target ref={ref} />
       </ProductContainer>

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import { getCookie, removeCookie } from '../api/cookie';
-import Swal from 'sweetalert2';
+import Swal, { SweetAlertPosition } from 'sweetalert2';
 
 function MainHeader() {
   const navigate = useNavigate();
@@ -28,13 +28,29 @@ function MainHeader() {
     removeCookie('token');
     setLogin(false);
     navigate('/');
-    // alert('로그아웃 되었습니다');
-    Swal.fire({
-      title: 'Error!',
-      text: 'Do you want to continue',
-      icon: 'error',
-      confirmButtonText: 'Cool',
+
+    const Toast = Swal.mixin({
+      toast: true,
+      position: 'top',
+      showConfirmButton: false,
+      timer: 1000,
+      timerProgressBar: true,
+      didOpen: (toast) => {
+        toast.addEventListener('mouseenter', Swal.stopTimer);
+        toast.addEventListener('mouseleave', Swal.resumeTimer);
+      },
     });
+
+    Toast.fire({
+      icon: 'success',
+      title: '로그아웃 되었습니다',
+    });
+
+    // Swal.fire({
+    //   title: '로그아웃 되었습니다',
+    //   icon: 'info',
+    //   confirmButtonText: 'Cool',
+    // });
   };
 
   /**로고 클릭 핸들러 */

@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { authInstance } from '../api/api';
 import { getCookie } from '../api/cookie';
 import MainHeader from '../components/Header';
+import { Toast } from './Login';
 
 interface SignupData {
   email: string;
@@ -31,7 +32,10 @@ function Signup() {
   useEffect(() => {
     const token = getCookie('token');
     if (token) {
-      alert('이미 로그인 되어 있습니다');
+      Toast.fire({
+        icon: 'warning',
+        title: '이미 로그인 되어있습니다',
+      });
       navigate('/');
     }
   }, []);
@@ -45,7 +49,10 @@ function Signup() {
     }
     const response = await authInstance.post('/users/signup', signupData);
     if (response.data.ok == true) {
-      alert('가입완료');
+      Toast.fire({
+        icon: 'success',
+        title: '회원가입 완료',
+      });
       navigate('/login');
     } else {
       setValidate({ ...validation, msg: '이미 가입된 이메일 입니다.' });

@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import Swal from 'sweetalert2';
 import { orderInstance } from '../api/api';
 import { Order } from '../page/Myorder';
 
@@ -6,9 +7,16 @@ function OrderCard({ props }: { props: Order }) {
   const payHandle = async () => {
     const response = await orderInstance.put(`/orders/${props.orderId}`);
     if (response.data.message == '재고가 부족합니다') {
-      return alert('재고가 부족합니다');
+      return Swal.fire({
+        icon: 'warning',
+        title: '재고가 부족합니다.',
+      });
     }
-    alert('결제 처리중 입니다');
+    Swal.fire({
+      icon: 'success',
+      title: '결제가 처리중입니다.',
+      text: '잠시 기다려 주세요.',
+    });
     window.location.reload();
   };
   return (

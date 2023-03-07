@@ -22,6 +22,7 @@ export const useFetchProducts = (price: string) => {
     },
     {
       getNextPageParam: ({ data }) => {
+        if (!data.length) return undefined;
         const { productId: lastId, price: lastPrice } = data[data.length - 1];
         return data.length < 20
           ? undefined

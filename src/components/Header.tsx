@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import { getCookie, removeCookie } from '../api/cookie';
+import Swal from 'sweetalert2';
 
 function MainHeader() {
   const navigate = useNavigate();
@@ -27,7 +28,13 @@ function MainHeader() {
     removeCookie('token');
     setLogin(false);
     navigate('/');
-    alert('로그아웃 되었습니다');
+    // alert('로그아웃 되었습니다');
+    Swal.fire({
+      title: 'Error!',
+      text: 'Do you want to continue',
+      icon: 'error',
+      confirmButtonText: 'Cool',
+    });
   };
 
   /**로고 클릭 핸들러 */
@@ -40,7 +47,7 @@ function MainHeader() {
   };
   return (
     <Header>
-      <LogoDiv onClick={logoClick}>Shopping Search</LogoDiv>
+      <Logo src="superorder_logo.png" onClick={logoClick} />
       {isLogin ? (
         <ButtonDiv>
           <MyorderButton onClick={myOrders}>MyOrders</MyorderButton>
@@ -55,10 +62,9 @@ function MainHeader() {
 
 export default MainHeader;
 
-const LogoDiv = styled.div`
+const Logo = styled.img`
+  width: 250px;
   margin-left: 20px;
-  font-weight: 100px;
-  font-size: 30px;
   color: white;
   &:hover {
     cursor: pointer;

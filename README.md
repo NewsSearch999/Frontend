@@ -4,7 +4,7 @@
 >**[📎 노션](https://www.notion.so/OrderSearch-11ef1dbc148444b8b55efaa4d9f1775b)**<br/><br/>
 >**[📎 Backend링크](https://github.com/NewsSearch999/webserver2)**<br/><br/>
 
-
+실제 서비스에서 무수히 쏟아지는 주문을 어떻게 처리할 수 있을까? 라는 질문에서 고안된 프로젝트 입니다.
 <br/>
 
 

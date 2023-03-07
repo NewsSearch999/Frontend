@@ -25,7 +25,7 @@ export interface Product {
 function MainPage() {
   const [searchParams, setSerchParams] = useSearchParams();
   const price = searchParams.get('price');
-  const { data, hasNextPage, isFetching, fetchNextPage, remove } =
+  const { data, hasNextPage, isFetching, fetchNextPage, remove, isLoading } =
     useFetchProducts(price || '0');
 
   /**상품데이터 */
@@ -101,7 +101,11 @@ function MainPage() {
         </PriceForm>
       </SearchDiv>
       <ProductContainer>
-        {products && productMap}
+        {products.length || isLoading ? (
+          productMap
+        ) : (
+          <NoData>가격 검색결과가 없습니다</NoData>
+        )}
         <Target ref={ref} />
       </ProductContainer>
       <TopButton />
@@ -109,6 +113,13 @@ function MainPage() {
   );
 }
 export default MainPage;
+
+const NoData = styled.div`
+  position: fixed;
+  top: 40%;
+  font-size: 30px;
+  color: rgba(0, 0, 0, 0.4);
+`;
 
 /**무한 스크롤 타겟  */
 const Target = styled.div`

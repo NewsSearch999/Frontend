@@ -7,6 +7,7 @@ import { getCookie } from '../api/cookie';
 import MainHeader from '../components/Header';
 import OrderCard from '../components/OrderCard';
 import TopButton from '../components/TopButton';
+import { Toast } from './Login';
 
 export interface Order {
   orderId: number;
@@ -28,7 +29,10 @@ export function Myorder() {
   useEffect(() => {
     const token = getCookie('token');
     if (!token) {
-      alert('로그인후 이용가능 합니다');
+      Toast.fire({
+        icon: 'warning',
+        title: '로그인 후 이용가능합니다',
+      });
       navigate('/');
       return;
     }

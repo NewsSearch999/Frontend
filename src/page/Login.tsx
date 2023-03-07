@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import Swal, { SweetAlertPosition } from 'sweetalert2';
 import { authInstance } from '../api/api';
 import { getCookie } from '../api/cookie';
 import MainHeader from '../components/Header';
@@ -9,6 +10,18 @@ interface LoginData {
   email: string;
   password: string;
 }
+
+export const Toast = Swal.mixin({
+  toast: true,
+  position: 'top',
+  showConfirmButton: false,
+  timer: 1000,
+  timerProgressBar: true,
+  didOpen: (toast) => {
+    toast.addEventListener('mouseenter', Swal.stopTimer);
+    toast.addEventListener('mouseleave', Swal.resumeTimer);
+  },
+});
 
 function Login() {
   /**로그인정보 state */
@@ -28,7 +41,10 @@ function Login() {
   useEffect(() => {
     const token = getCookie('token');
     if (token) {
-      alert('이미 로그인 되어 있습니다');
+      Toast.fire({
+        icon: 'warning',
+        title: '이미 로그인 되어있습니다',
+      });
       navigate('/');
     }
   }, []);
@@ -46,6 +62,11 @@ function Login() {
       return;
     }
     /** 인터셉터에서 쿠키 저장 후 메인화면으로 이동*/
+
+    Toast.fire({
+      icon: 'success',
+      title: '로그인 되었습니다',
+    });
     navigate('/', { state: { Login: true } });
   };
 

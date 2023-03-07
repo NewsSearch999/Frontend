@@ -4,6 +4,7 @@ import { orderInstance } from '../api/api';
 import { Product } from '../page/Main';
 import styled from 'styled-components';
 import CloseIcon from '@mui/icons-material/Close';
+import Swal from 'sweetalert2';
 
 interface props {
   closeModal: () => void;
@@ -26,7 +27,11 @@ function OrderModal(props: props) {
   /**주문 생성 */
   const orderSubmit = async () => {
     if (!+quantity) {
-      alert('수량을 입력해주세요');
+      Swal.fire({
+        icon: 'warning',
+        title: '수량을 입력해주세요',
+        width: '350px',
+      });
       return;
     }
     const response = await orderInstance.post('/orders', {

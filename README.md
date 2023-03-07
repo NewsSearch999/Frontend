@@ -51,12 +51,12 @@
 <br/>
 
 ## 💻 **_화면 구성_**
-| 회원가입&로그인 | 
-|:---: |
-| ![login](https://user-images.githubusercontent.com/98438390/223413005-f1b277c2-3df0-4ddd-8dd2-824613db626a.gif)| 
+| 회원가입&로그인 | 상품검색&무한스크롤 |
+|:---: | :---: |
+| ![login](https://user-images.githubusercontent.com/98438390/223413005-f1b277c2-3df0-4ddd-8dd2-824613db626a.gif)|![search200per](https://user-images.githubusercontent.com/98438390/223418306-b4669f55-8c70-41bc-b12e-4a15bdc160f8.gif)|
 <br/><br/>
 
- |상품검색 무한스크롤 |
+ |상품검색&무한스크롤 |
  | :---: |
  |![search200per](https://user-images.githubusercontent.com/98438390/223418306-b4669f55-8c70-41bc-b12e-4a15bdc160f8.gif)|
  <br/><br/>

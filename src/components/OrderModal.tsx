@@ -30,6 +30,7 @@ function OrderModal(props: props) {
       Swal.fire({
         icon: 'warning',
         title: '수량을 입력해주세요',
+        width: '350px',
       });
       return;
     }

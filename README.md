@@ -54,8 +54,10 @@
 | 회원가입&로그인 |  상품검색 무한스크롤 |
 |:---: | :---: |
 | ![login](https://user-images.githubusercontent.com/98438390/223413005-f1b277c2-3df0-4ddd-8dd2-824613db626a.gif) | ![search200per](https://user-images.githubusercontent.com/98438390/223418306-b4669f55-8c70-41bc-b12e-4a15bdc160f8.gif)|
-<br/>
-| 주문생성  | 주문생성  |
+
+<br/><br/>
+
+| 주문생성 | 주문생성  |
 | :---: | :---: |
 | ![order](https://user-images.githubusercontent.com/98438390/223413479-f71d6570-f306-4542-ab12-683818fa3673.gif)|![order](https://user-images.githubusercontent.com/98438390/223413479-f71d6570-f306-4542-ab12-683818fa3673.gif)|
 

@@ -47,7 +47,7 @@ function Signup() {
       setValidate({ ...validation, msg: '이메일 패스워드를 확인하세요' });
       return;
     }
-    const response = await authInstance.post('/users/signup', signupData);
+    const response = await authInstance.post('/auth/signup', signupData);
     if (response.data.ok == true) {
       Toast.fire({
         icon: 'success',

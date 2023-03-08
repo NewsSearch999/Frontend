@@ -6,13 +6,15 @@ import { getCookie, removeCookie, setCookie } from './cookie';
 
 /**주문서버 인스턴스 */
 const orderInstance = axios.create({
-  baseURL: process.env.REACT_APP_API,
+  baseURL: 'http://localhost:3000',
+  // baseURL: process.env.REACT_APP_API,
   timeout: 3000,
 });
 
 /**인증서버 인스턴스 */
 const authInstance = axios.create({
-  baseURL: process.env.REACT_APP_API,
+  baseURL: 'http://localhost:3000',
+  // baseURL: process.env.REACT_APP_API,
   timeout: 3000,
 });
 

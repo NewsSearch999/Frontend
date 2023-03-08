@@ -1,4 +1,5 @@
 import axios, { InternalAxiosRequestConfig } from 'axios';
+import Swal from 'sweetalert2';
 
 import { getCookie, removeCookie, setCookie } from './cookie';
 
@@ -50,7 +51,11 @@ orderInstance.interceptors.response.use(
     const { data } = error.response;
     /**토큰 만료시 */
     if (data.statusCode == 401 && data.message == 'Unauthorized') {
-      alert('로그인 만료');
+      Swal.fire({
+        icon: 'warning',
+        title: '로그인 만료',
+        width: '350px',
+      });
       removeCookie('token');
       return window.location.replace('/login');
     }
@@ -113,7 +118,11 @@ authInstance.interceptors.response.use(
     }
 
     if (data.statusCode == 403 && data.message == '잘못된 비밀번호 입니다') {
-      alert('비밀번호가 틀렸습니다');
+      Swal.fire({
+        icon: 'error',
+        title: '비밀번호가 틀렸습니다',
+        width: '350px',
+      });
     }
     return Promise.reject(error);
   },

@@ -43,11 +43,19 @@ orderInstance.interceptors.response.use(
     console.log(response);
     return response;
   },
-
   (error) => {
     //응답 에러가 발생했을 때 수행할 로직
-    const { data } = error.response;
+    const data = error.response?.data;
     /**토큰 만료시 */
+
+    if (!data) {
+      Swal.fire({
+        icon: 'error',
+        title: '서버에러 잠시후 다시 시도해 주세요',
+        width: '350px',
+      });
+    }
+
     if (data.statusCode == 401 && data.message == 'Unauthorized') {
       Swal.fire({
         icon: 'warning',

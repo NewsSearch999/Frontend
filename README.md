@@ -64,32 +64,6 @@
  |![search-6](https://user-images.githubusercontent.com/98438390/223464310-f990f272-ac1c-4db2-bf37-76fd3da41771.gif)|
  <br/><br/>
  
- 
-
-
-
-
-## ⚠️ **_트러블 슈팅_**
-**<details><summary>제목</summary>**
-
-❗**문제**: 문제<br/>
-<br/>
-❓**원인**:원인<br/>
-<br/>
-💡**문제 해결**: 해결
-<br/>
-</details>
-
-**<details><summary>제목</summary>**
-
-❗**문제**: 문제<br/>
-<br/>
-❓**원인**: 원인<br/>
-<br/>
-💡**문제 해결**: <br/>
-<br/>
-
-</details>
 
 
 
